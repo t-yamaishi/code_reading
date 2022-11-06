@@ -2,6 +2,7 @@ class TeamsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_team, only: %i[show edit update destroy]
 
+
   def index
     @teams = Team.all
   end
@@ -15,7 +16,9 @@ class TeamsController < ApplicationController
     @team = Team.new
   end
 
-  def edit; end
+  def edit
+    redirect_to team_path(@team) unless @team.owner == current_user
+  end
 
   def create
     @team = Team.new(team_params)
@@ -56,4 +59,5 @@ class TeamsController < ApplicationController
   def team_params
     params.fetch(:team, {}).permit %i[name icon icon_cache owner_id keep_team_id]
   end
+
 end
